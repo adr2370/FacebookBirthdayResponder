@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>adr2370 Testing Page</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+</head>
+<body>
+	<div id="fb-root"></div>
+	<div class="login" style="display:none;cursor:pointer;" onclick="login();"><img src="http://www.tweekly.fm/media/image/login-facebook.png" /></div>
+	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript">
+		var initialized=false;
+		function login() {
+		    FB.login(function(response) {
+		        if (response.authResponse) {
+					getFacebookData();
+		        } else {
+		            // cancelled
+		        }
+		    }, {scope: 'user_likes'});
+		}
+
+		function getLogin() {
+
+			FB.getLoginStatus(function(response) {
+			    if (response.status === 'connected') {
+					getFacebookData();
+			    } else if (response.status === 'not_authorized') {
+					$('.login').show();
+			    } else {
+					$('.login').show();
+			    }
+			}, true);
+		}
+
+		window.fbAsyncInit = function() {
+			initialized=true;
+		  FB.init({ 
+		    appId: '139590309536604',
+		    status: true,
+		    cookie: true,
+		    xfbml: true,
+		    frictionlessRequests: true,
+		    useCachedDialogs: true,
+		    oauth: true
+		  });
+		getLogin();
+
+		};
+		(function(d){
+		 var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+		 if (d.getElementById(id)) {return;}
+		 js = d.createElement('script'); js.id = id; js.async = true;
+		 js.src = "//connect.facebook.net/en_US/all.js";
+		 ref.parentNode.insertBefore(js, ref);
+		}(document));
+		$(function() {
+			if(!initialized) {
+				window.fbAsyncInit();
+			}
+		});
+	</script>
+</body>
+</html>
