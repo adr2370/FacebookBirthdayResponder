@@ -12,9 +12,9 @@
 	<div id="fb-root"></div>
 	<h1 style="font-size: 3em;margin-top: 2em;">FACEBOOK BIRTHDAY RESPONDER</h1>
 	<label class="notlogin" for="message" style="font-size: 2em;display:none;">Message: </label>
-	<input class="notlogin" name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;display:none;" value="Thank You!">
+	<input id="input" class="notlogin" name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;display:none;" value="Thank You!">
 	<br class="notlogin" style="display:none;">
-	<a href="#" class="notlogin execute" style="display:none;margin-bottom: 1em;" onclick="replyAll();">Click here to reply to your <span id="posts"></span> birthday wishes</a>
+	<a href="#" id="button" class="notlogin execute" style="display:none;margin-bottom: 1em;" onclick="replyAll();">Click here to reply to your <span id="posts"></span> birthday wishes <span id="from"></span></a>
 	<div class="login zocial facebook" style="display:none;cursor:pointer;font-size:2em;" onclick="login();">
 		Sign in with Facebook
 	</div>
@@ -32,9 +32,11 @@
 		function replyAll() {
 			for(var i=0;i<posts.length;i++) {
 				//$.post("https://graph.facebook.com/"+posts[i]+"/comments", { access_token: accessToken, message: "Thank you!" } );
-				var rand=Math.floor(Math.random()*150+50);
+				var rand=Math.floor(Math.random()*300+50);
 				$("#pic"+i).attr("src","http://placekitten.com/"+rand+"/"+rand);
 			}
+			$("#input").val('I was lazy and used http://birthdayresponder.com to respond to your birthday post');
+			$("#button").val('Tell your friends how you responded to them all so easily');
 		}
 		
 		function loggedIn() {
@@ -59,11 +61,12 @@
 						start.setDate(birthday[1]);
 						start.setMonth(birthday[0]-1);
 						if(start>end) {
-							start.setYear(1900+start.getYear()-1);
+							start.setYear(start.getFullYear()-1);
 						}
 						start.setHours(0,0,0,0);
 						end=new Date(start);
 						end.setHours(23,59,59,999);
+						$("#from").text(" your birthday on "+start.getMonth()+"/"+start.getDate()+"/"+start.getFullYear());
 						FB.api(
 						{
 							method: "fql.query",
@@ -80,8 +83,8 @@
 										if(splitMessage[j][0]=="b"&&splitMessage[j][splitMessage[j].length-1]=="y") found=true;
 									}
 									if(found) {
-										posts.push(data[i].post_id);
 										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img id='pic"+posts.length+"' src='https://graph.facebook.com/"+data[i].actor_id+"/picture' width='50' height='50'/></a>");
+										posts.push(data[i].post_id);
 									}
 								}
 							}
