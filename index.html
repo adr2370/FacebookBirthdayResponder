@@ -12,26 +12,49 @@
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
-	var x;
+		var x;
+		var start=new Date();
+		var end=new Date();
+		end.setHours(23,59,59,999);
 		function loggedIn() {
 			FB.api(
 			{
-				method: "fql.query",
-				query: "SELECT post_id, actor_id, target_id, message, created_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type='newsfeed') AND is_hidden = 0"
-		    },
-		    function(data) {
-				console.log(data);
-				FB.api(
-				{
-				    method: "fql.query",
-				    query: "SELECT read_stream,publish_stream FROM permissions WHERE uid=me()"
-				},
-				function(data) {
-					if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
-						logout();
-					}
-				});
-		    });
+			    method: "fql.query",
+			    query: "SELECT read_stream,publish_stream FROM permissions WHERE uid=me()"
+			},
+			function(data) {
+				if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
+					//ask for more permissions
+				} else {
+					FB.api(
+					{
+					    method: "fql.query",
+					    query: "SELECT birthday_date FROM user WHERE uid=me()"
+					},
+					function(data) {
+						//set start and end time
+						var birthday=data[0].birthday_date.split("/");
+						start.setDate(birthday[1]);
+						start.setMonth(birthday[0]-1);
+						if(start>end) {
+							start.setYear(1900+start.getYear()-1);
+						}
+						start.setHours(0,0,0,0);
+						end=new Date(start);
+						end.setHours(23,59,59,999);
+						FB.api(
+						{
+							method: "fql.query",
+							query: "SELECT post_id, actor_id, target_id, message, created_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me()) AND is_hidden = 0 AND created_time>="+(int)(start.getTime()/1000)+" AND created_time<="+(int)(end.getTime()/1000)
+					    },
+					    function(data) {
+							for(var i=0;i<data.length;i++) {
+
+							}
+					    });
+					});
+				}
+			});
 		}
 	
 		var initialized=false;
@@ -44,7 +67,7 @@
 		        } else {
 		            // cancelled
 		        }
-		    }, {scope: 'read_stream,publish_stream'});
+		    }, {scope: 'read_stream,publish_stream,user_birthday'});
 		}
 		
 		function logout() {
