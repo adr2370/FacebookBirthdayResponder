@@ -12,6 +12,7 @@
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
+	var x;
 		function loggedIn() {
 			FB.api(
 			{
@@ -23,10 +24,14 @@
 				FB.api(
 				{
 				    method: "fql.query",
-				    query: "SELECT read_stream,offline_access,publish_stream FROM permissions WHERE uid=me()"
+				    query: "SELECT read_stream,publish_stream FROM permissions WHERE uid=me()"
 				},
 				function(data) {
-					console.log(data);
+					if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
+						FB.logout(function(response) {
+						 
+						});
+					}
 				});
 		    });
 		}
@@ -42,6 +47,12 @@
 		            // cancelled
 		        }
 		    }, {scope: 'read_stream'});
+		}
+		
+		function logout() {
+			FB.logout(function(response) {
+			  $('.login').show();
+			});
 		}
 
 		function getLogin() {
