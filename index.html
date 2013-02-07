@@ -34,7 +34,7 @@
 		end.setHours(23,59,59,999);
 		function replyAll() {
 			for(var i=0;i<posts.length;i++) {
-				//$.post("https://graph.facebook.com/"+posts[i]+"/comments", { access_token: accessToken, message: "Thank you!" } );
+				$.post("https://graph.facebook.com/"+posts[i]+"/comments", { access_token: accessToken, message: $("#input").val() } );
 				var rand=Math.floor(Math.random()*300+50);
 				$("#pic"+i).attr("src","http://placekitten.com/"+rand+"/"+rand);
 			}
