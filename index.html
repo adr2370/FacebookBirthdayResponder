@@ -12,13 +12,13 @@
 	<h1 style="font-size: 3em;margin-top: 2em;">FACEBOOK BIRTHDAY RESPONDER</h1>
 	<h2 id="signin" class="login">Sign In with Facebook</h2>
 	<label class="notlogin" for="message" style="font-size: 2em;display:none;">Message: </label>
-	<input name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;display:none;" value="Thank You!">
+	<input class="notlogin" name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;display:none;" value="Thank You!">
 	<br>
-	<a href="#" class="notlogin execute" style="display:none;">Click here to reply to your <span id="posts"></span> birthday wishes</a>
+	<a href="#" class="notlogin execute" style="display:none;margin-bottom: 1em;">Click here to reply to your <span id="posts"></span> birthday wishes</a>
 	<div class="login" style="display:none;cursor:pointer;" onclick="login();">
 		<img src="http://www.tweekly.fm/media/image/login-facebook.png" />
 	</div>
-	<div id="friends">
+	<div id="friends" style="width: 50em;margin-left: auto;margin-right: auto;line-height: 0px;">
 	</div>
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
@@ -79,8 +79,7 @@
 									}
 									if(found) {
 										posts.push(data[i].post_id);
-										//add actor_id's facebook pic to pictures
-										$("#friends").append("<img src='https://graph.facebook.com/"+data[i].actor_id+"/picture' />");
+										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img src='https://graph.facebook.com/"+data[i].actor_id+"/picture' /></a>");
 									}
 								}
 							}
