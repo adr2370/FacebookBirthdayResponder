@@ -6,14 +6,17 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 </head>
-<body>
+<body style="background-image: url(img/ravenna.png); zoom: 1; background-repeat: repeat repeat;">
 	<div id="fb-root"></div>
+	<h1>Reply to all your birthday wishes on Facebook with one click</h1>
+	<h2>Sign In with Facebook</h2>
+	<div id="posts"></div>
 	<div class="login" style="display:none;cursor:pointer;" onclick="login();"><img src="http://www.tweekly.fm/media/image/login-facebook.png" /></div>
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
 		var responses=new Array("Thank you!","Thanks a lot");
-		var x,accessToken;
+		var x,accessToken,posts;
 		var initialized=false;
 		var start=new Date();
 		var end=new Date();
@@ -59,6 +62,7 @@
 							query: "SELECT message,post_id FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
 					    },
 					    function(data) {
+							posts=new Array();
 							for(var i=0;i<data.length;i++) {
 								if(data[i].message.length>0) {
 									var splitMessage=data[i].message.split(" ");
@@ -68,12 +72,11 @@
 										if(splitMessage[j][0]=="b"&&splitMessage[j][splitMessage[j].length-1]=="y") found=true;
 									}
 									if(found) {
-										console.log(data[i].message);
-										//$.post("https://graph.facebook.com/"+data[i].post_id+"/comments", { access_token: accessToken, message: "Thank you!" } );
+										posts.push(data[i].post_id);
 									}
 								}
-								
 							}
+							$("#posts").text(posts.length);
 					    });
 					});
 				}
