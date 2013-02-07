@@ -2,7 +2,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Facebook Birthday Responder</title>
+	<title>Birthday Responder</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" type="text/css" href="css/index.css">
@@ -14,7 +14,7 @@
 	<label class="notlogin" for="message" style="font-size: 2em;display:none;">Message: </label>
 	<input id="input" class="notlogin" name="message" style="font-size: 2em;width: 20em;margin-bottom: 1em;display:none;" value="Thank You!">
 	<br class="notlogin" style="display:none;">
-	<a href="#" id="button" class="notlogin execute" style="display:none;margin-bottom: 1em;" onclick="replyAll();">Click here to reply to your <span id="posts"></span> birthday wishes <span id="from"></span></a>
+	<a href="" id="button" class="notlogin execute" style="display:none;margin-bottom: 1em;" onclick="replyAll();">Click here to reply to your <span id="posts"></span> birthday wishes <span id="from"></span></a>
 	<div class="login zocial facebook" style="display:none;cursor:pointer;font-size:2em;" onclick="login();">
 		Sign in with Facebook
 	</div>
@@ -24,7 +24,8 @@
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
 		var responses=new Array("Thank you!","Thanks a lot");
-		var x,accessToken,posts;
+		var x,accessToken;
+		var posts=new Array();
 		var initialized=false;
 		var start=new Date();
 		var end=new Date();
@@ -73,22 +74,23 @@
 							query: "SELECT message,post_id,actor_id FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
 					    },
 					    function(data) {
-							posts=new Array();
-							for(var i=0;i<data.length;i++) {
-								if(data[i].message.length>0) {
-									var splitMessage=data[i].message.split(" ");
-									var found=false;
-									for(var j=0;!found&&j<splitMessage.length;j++) {
-										splitMessage[j]=splitMessage[j].toLowerCase().replace(/\W/g, '');
-										if(splitMessage[j][0]=="b"&&splitMessage[j][splitMessage[j].length-1]=="y") found=true;
-									}
-									if(found) {
-										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img id='pic"+posts.length+"' src='https://graph.facebook.com/"+data[i].actor_id+"/picture' width='50' height='50'/></a>");
-										posts.push(data[i].post_id);
+							if(posts.length==0) {
+								for(var i=0;i<data.length;i++) {
+									if(data[i].message.length>0) {
+										var splitMessage=data[i].message.split(" ");
+										var found=false;
+										for(var j=0;!found&&j<splitMessage.length;j++) {
+											splitMessage[j]=splitMessage[j].toLowerCase().replace(/\W/g, '');
+											if(splitMessage[j][0]=="b"&&splitMessage[j][splitMessage[j].length-1]=="y") found=true;
+										}
+										if(found) {
+											$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img id='pic"+posts.length+"' src='https://graph.facebook.com/"+data[i].actor_id+"/picture' width='50' height='50'/></a>");
+											posts.push(data[i].post_id);
+										}
 									}
 								}
+								$("#posts").text(posts.length);
 							}
-							$("#posts").text(posts.length);
 					    });
 					});
 				}
