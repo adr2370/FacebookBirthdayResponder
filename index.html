@@ -9,10 +9,15 @@
 </head>
 <body style="background-image: url(img/ravenna.png); zoom: 1; background-repeat: repeat repeat; text-align: center;">
 	<div id="fb-root"></div>
-	<h1 style="font-size: 3em;">FACEBOOK BIRTHDAY RESPONDER<br>JUST ONE CLICK</h1>
-	<h2 id="signin">Sign In with Facebook</h2>
-	<a href="#" class="execute">Click here to reply to your &nbsp;&nsbp;&nbsp; <span id="posts"></span> birthday wishes</a>
-	<div class="login" style="display:none;cursor:pointer;" onclick="login();"><img src="http://www.tweekly.fm/media/image/login-facebook.png" /></div>
+	<h1 style="font-size: 3em;margin-top: 2em;">FACEBOOK BIRTHDAY RESPONDER</h1>
+	<h2 id="signin" class="login">Sign In with Facebook</h2>
+	<label class="notlogin" for="message" style="font-size: 2em;display:none;">Message: </label>
+	<input name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;" value="Thank You!">
+	<br>
+	<a href="#" class="notlogin execute" style="display:none;">Click here to reply to your <span id="posts"></span> birthday wishes</a>
+	<div class="login" style="display:none;cursor:pointer;" onclick="login();">
+		<img src="http://www.tweekly.fm/media/image/login-facebook.png" />
+	</div>
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
@@ -22,6 +27,12 @@
 		var start=new Date();
 		var end=new Date();
 		end.setHours(23,59,59,999);
+		function replyAll() {
+			for(var i=0;i<posts.length;i++) {
+				//$.post("https://graph.facebook.com/"+posts[i]+"/comments", { access_token: accessToken, message: "Thank you!" } );
+			}
+		}
+		
 		function loggedIn() {
 			FB.api(
 			{
@@ -31,7 +42,7 @@
 			function(data) {
 				if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
 					$('.login').show();
-					$("#signin").show();
+					$('.notlogin').hide();
 				} else {
 					FB.api(
 					{
@@ -80,7 +91,7 @@
 		    FB.login(function(response) {
 		        if (response.authResponse) {
 					$('.login').hide();
-					$("#signin").hide();
+					$('.notlogin').show();
 					//logged in
 					accessToken=response.authResponse.accessToken;
 					loggedIn();
@@ -92,7 +103,8 @@
 		
 		function logout() {
 			FB.logout(function(response) {
-			  $('.login').show();
+				$('.login').show();	
+				$('.notlogin').hide();
 			});
 		}
 
@@ -100,12 +112,15 @@
 			FB.getLoginStatus(function(response) {
 			    if (response.status === 'connected') {
 					$('.login').hide();
+					$('.notlogin').show();
 					//logged in
 					loggedIn();
 			    } else if (response.status === 'not_authorized') {
 					$('.login').show();
+					$('.notlogin').hide();
 			    } else {
 					$('.login').show();
+					$('.notlogin').hide();
 			    }
 			}, true);
 		}
