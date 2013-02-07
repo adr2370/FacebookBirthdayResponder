@@ -16,7 +16,8 @@
 		function login() {
 		    FB.login(function(response) {
 		        if (response.authResponse) {
-					getFacebookData();
+					$('.login').hide();
+					//logged in
 		        } else {
 		            // cancelled
 		        }
@@ -27,7 +28,8 @@
 
 			FB.getLoginStatus(function(response) {
 			    if (response.status === 'connected') {
-					getFacebookData();
+					$('.login').hide();
+					//logged in
 			    } else if (response.status === 'not_authorized') {
 					$('.login').show();
 			    } else {
