@@ -32,6 +32,8 @@
 		function replyAll() {
 			for(var i=0;i<posts.length;i++) {
 				//$.post("https://graph.facebook.com/"+posts[i]+"/comments", { access_token: accessToken, message: "Thank you!" } );
+				var rand=Math.floor(Math.random()*150+50);
+				$("#pic"+i).attr("src","http://placekitten.com/"+rand+"/"+rand);
 			}
 		}
 		
@@ -79,7 +81,7 @@
 									}
 									if(found) {
 										posts.push(data[i].post_id);
-										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img src='https://graph.facebook.com/"+data[i].actor_id+"/picture' /></a>");
+										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img id='pic"+i+"' src='https://graph.facebook.com/"+data[i].actor_id+"/picture' width='50' height='50'/></a>");
 									}
 								}
 							}
