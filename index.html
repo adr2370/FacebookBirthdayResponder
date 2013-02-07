@@ -12,7 +12,9 @@
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
-		var x;
+		var responses=new Array("Thank you!","Thanks a lot");
+		var x,accessToken;
+		var initialized=false;
 		var start=new Date();
 		var end=new Date();
 		end.setHours(23,59,59,999);
@@ -45,11 +47,23 @@
 						FB.api(
 						{
 							method: "fql.query",
-							query: "SELECT post_id, actor_id, target_id, message, created_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me()) AND is_hidden = 0 AND created_time>="+(int)(start.getTime()/1000)+" AND created_time<="+(int)(end.getTime()/1000)
+							query: "SELECT message,post_id FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
 					    },
 					    function(data) {
 							for(var i=0;i<data.length;i++) {
-
+								if(data[i].message.length>0) {
+									var splitMessage=data[i].message.split(" ");
+									var found=false;
+									for(var j=0;!found&&j<splitMessage.length;j++) {
+										splitMessage[j]=splitMessage[j].toLowerCase().replace(/\W/g, '');
+										if(splitMessage[j][0]=="b"&&splitMessage[j][splitMessage[j].length-1]=="y") found=true;
+									}
+									if(found) {
+										console.log(data[i].message);
+										//$.post("https://graph.facebook.com/"+data[i].post_id+"/comments", { access_token: accessToken, message: "Thank you!" } );
+									}
+								}
+								
 							}
 					    });
 					});
@@ -57,12 +71,12 @@
 			});
 		}
 	
-		var initialized=false;
 		function login() {
 		    FB.login(function(response) {
 		        if (response.authResponse) {
 					$('.login').hide();
 					//logged in
+					accessToken=response.authResponse.accessToken;
 					loggedIn();
 		        } else {
 		            // cancelled
