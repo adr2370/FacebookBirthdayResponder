@@ -14,7 +14,7 @@
 	<label class="notlogin" for="message" style="font-size: 2em;display:none;">Message: </label>
 	<input class="notlogin" name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;display:none;" value="Thank You!">
 	<br class="notlogin" style="display:none;">
-	<a href="#" class="notlogin execute" style="display:none;margin-bottom: 1em;">Click here to reply to your <span id="posts"></span> birthday wishes</a>
+	<a href="#" class="notlogin execute" style="display:none;margin-bottom: 1em;" onclick="replyAll();">Click here to reply to your <span id="posts"></span> birthday wishes</a>
 	<div class="login zocial facebook" style="display:none;cursor:pointer;font-size:2em;" onclick="login();">
 		Sign in with Facebook
 	</div>
@@ -81,7 +81,7 @@
 									}
 									if(found) {
 										posts.push(data[i].post_id);
-										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img id='pic"+i+"' src='https://graph.facebook.com/"+data[i].actor_id+"/picture' width='50' height='50'/></a>");
+										$("#friends").prepend("<a href='https://www.facebook.com/"+data[i].actor_id+"' target='_blank'><img id='pic"+posts.length+"' src='https://graph.facebook.com/"+data[i].actor_id+"/picture' width='50' height='50'/></a>");
 									}
 								}
 							}
