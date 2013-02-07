@@ -26,7 +26,16 @@
 			},
 			function(data) {
 				if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
-					//ask for more permissions
+					FB.login(function(response) {
+				        if (response.authResponse) {
+							$('.login').hide();
+							//logged in
+							accessToken=response.authResponse.accessToken;
+							loggedIn();
+				        } else {
+				            // cancelled
+				        }
+				    }, {scope: 'read_stream,publish_stream,user_birthday'});
 				} else {
 					FB.api(
 					{
