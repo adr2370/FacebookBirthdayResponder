@@ -16,7 +16,7 @@
 		function loggedIn() {
 			FB.api(
 			{
-				method: 'fql.query',
+				method: "fql.query",
 				query: "SELECT post_id, actor_id, target_id, message, created_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type='newsfeed') AND is_hidden = 0"
 		    },
 		    function(data) {
@@ -28,9 +28,7 @@
 				},
 				function(data) {
 					if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
-						FB.logout(function(response) {
-						 
-						});
+						logout();
 					}
 				});
 		    });
@@ -46,7 +44,7 @@
 		        } else {
 		            // cancelled
 		        }
-		    }, {scope: 'read_stream'});
+		    }, {scope: 'read_stream,publish_stream'});
 		}
 		
 		function logout() {
