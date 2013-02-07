@@ -5,12 +5,13 @@
 	<title>adr2370 Testing Page</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
-<body style="background-image: url(img/ravenna.png); zoom: 1; background-repeat: repeat repeat;">
+<body style="background-image: url(img/ravenna.png); zoom: 1; background-repeat: repeat repeat; text-align: center;">
 	<div id="fb-root"></div>
-	<h1>Reply to all your birthday wishes on Facebook with one click</h1>
-	<h2>Sign In with Facebook</h2>
-	<div id="posts"></div>
+	<h1 style="font-size: 3em;">FACEBOOK BIRTHDAY RESPONDER<br>JUST ONE CLICK</h1>
+	<h2 id="signin">Sign In with Facebook</h2>
+	<a href="#" class="execute">Click here to reply to your &nbsp;&nsbp;&nbsp; <span id="posts"></span> birthday wishes</a>
 	<div class="login" style="display:none;cursor:pointer;" onclick="login();"><img src="http://www.tweekly.fm/media/image/login-facebook.png" /></div>
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
@@ -29,16 +30,8 @@
 			},
 			function(data) {
 				if(data[0].read_stream=="0"||data[0].publish_stream=="0") {
-					FB.login(function(response) {
-				        if (response.authResponse) {
-							$('.login').hide();
-							//logged in
-							accessToken=response.authResponse.accessToken;
-							loggedIn();
-				        } else {
-				            // cancelled
-				        }
-				    }, {scope: 'read_stream,publish_stream,user_birthday'});
+					$('.login').show();
+					$("#signin").show();
 				} else {
 					FB.api(
 					{
@@ -87,6 +80,7 @@
 		    FB.login(function(response) {
 		        if (response.authResponse) {
 					$('.login').hide();
+					$("#signin").hide();
 					//logged in
 					accessToken=response.authResponse.accessToken;
 					loggedIn();
