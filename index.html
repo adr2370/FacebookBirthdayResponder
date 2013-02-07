@@ -22,8 +22,8 @@
 				console.log(data);
 				FB.api(
 				{
-				    "method" => "fql.query",
-				    "query" => "SELECT read_stream,offline_access,publish_stream FROM permissions WHERE uid=me()"
+				    method: "fql.query",
+				    query: "SELECT read_stream,offline_access,publish_stream FROM permissions WHERE uid=me()"
 				},
 				function(data) {
 					console.log(data);
