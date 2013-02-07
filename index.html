@@ -33,11 +33,10 @@
 		        } else {
 		            // cancelled
 		        }
-		    }, {scope: 'read_stream'});
+		    }, {perms: 'read_stream'});
 		}
 
 		function getLogin() {
-
 			FB.getLoginStatus(function(response) {
 			    if (response.status === 'connected') {
 					$('.login').hide();
@@ -63,7 +62,6 @@
 		    oauth: true
 		  });
 		getLogin();
-
 		};
 		(function(d){
 		 var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
