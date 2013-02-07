@@ -12,11 +12,13 @@
 	<h1 style="font-size: 3em;margin-top: 2em;">FACEBOOK BIRTHDAY RESPONDER</h1>
 	<h2 id="signin" class="login">Sign In with Facebook</h2>
 	<label class="notlogin" for="message" style="font-size: 2em;display:none;">Message: </label>
-	<input name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;" value="Thank You!">
+	<input name="message" style="font-size: 2em;width: 15em;margin-bottom: 1em;display:none;" value="Thank You!">
 	<br>
 	<a href="#" class="notlogin execute" style="display:none;">Click here to reply to your <span id="posts"></span> birthday wishes</a>
 	<div class="login" style="display:none;cursor:pointer;" onclick="login();">
 		<img src="http://www.tweekly.fm/media/image/login-facebook.png" />
+	</div>
+	<div id="friends">
 	</div>
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
@@ -63,7 +65,7 @@
 						FB.api(
 						{
 							method: "fql.query",
-							query: "SELECT message,post_id FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
+							query: "SELECT message,post_id,actor_id FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
 					    },
 					    function(data) {
 							posts=new Array();
@@ -77,6 +79,8 @@
 									}
 									if(found) {
 										posts.push(data[i].post_id);
+										//add actor_id's facebook pic to pictures
+										$("#friends").append("<img src='https://graph.facebook.com/"+data[i].actor_id+"/picture' />");
 									}
 								}
 							}
