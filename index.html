@@ -25,7 +25,6 @@
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
-		var responses=new Array("Thank you!","Thanks a lot");
 		var x,accessToken;
 		var posts=new Array();
 		var initialized=false;
@@ -126,6 +125,7 @@
 					$('.login').hide();
 					$('.notlogin').show();
 					//logged in
+					accessToken=response.authResponse.accessToken;
 					loggedIn();
 			    } else if (response.status === 'not_authorized') {
 					$('.login').show();
