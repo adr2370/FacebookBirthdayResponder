@@ -36,7 +36,7 @@
 				$("#pic"+i).attr("src","http://placekitten.com/"+rand+"/"+rand);
 			}
 			$("#input").val('I was lazy and used http://birthdayresponder.com to respond to your birthday post');
-			$("#button").val('Tell your friends how you responded to them all so easily');
+			$("#button").html('Tell your friends how you responded to them all so easily');
 		}
 		
 		function loggedIn() {
@@ -66,7 +66,7 @@
 						start.setHours(0,0,0,0);
 						end=new Date(start);
 						end.setHours(23,59,59,999);
-						$("#from").text(" your birthday on "+start.getMonth()+"/"+start.getDate()+"/"+start.getFullYear());
+						$("#from").text(" from "+start.getMonth()+"/"+start.getDate()+"/"+start.getFullYear());
 						FB.api(
 						{
 							method: "fql.query",
