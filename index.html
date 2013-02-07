@@ -12,16 +12,28 @@
 	<script id="facebook-jssdk" async="" src="https://connect.facebook.net/en_US/all.js"></script>
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
+		function loggedIn() {
+			FB.api(
+			{
+				method: 'fql.query',
+				query: "SELECT post_id, actor_id, target_id, message, created_time, type FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type='newsfeed') AND is_hidden = 0"
+		    },
+		    function(data) {
+				console.log(data);
+		    });
+		}
+	
 		var initialized=false;
 		function login() {
 		    FB.login(function(response) {
 		        if (response.authResponse) {
 					$('.login').hide();
 					//logged in
+					loggedIn();
 		        } else {
 		            // cancelled
 		        }
-		    }, {scope: 'user_likes'});
+		    }, {scope: 'read_stream'});
 		}
 
 		function getLogin() {
@@ -30,6 +42,7 @@
 			    if (response.status === 'connected') {
 					$('.login').hide();
 					//logged in
+					loggedIn();
 			    } else if (response.status === 'not_authorized') {
 					$('.login').show();
 			    } else {
