@@ -26,6 +26,8 @@
 	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
 		var x,accessToken;
+		var maxComments=1;
+		var checkComments=false;
 		var posts=new Array();
 		var initialized=false;
 		var start=new Date();
@@ -39,6 +41,7 @@
 			}
 			$("#input").val('I was lazy and used http://birthdayresponder.com to respond to your birthday post');
 			$("#button").html('Tell your friends how you responded to them all so easily');
+			maxComments++;
 		}
 		
 		function loggedIn() {
@@ -72,12 +75,12 @@
 						FB.api(
 						{
 							method: "fql.query",
-							query: "SELECT message,post_id,actor_id FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
+							query: "SELECT message,post_id,actor_id,comments FROM stream WHERE source_id=me() AND is_hidden = 0 AND created_time>="+parseInt(start.getTime()/1000)+" AND created_time<="+parseInt(end.getTime()/1000)+" LIMIT 1000"
 					    },
 					    function(data) {
 							if(posts.length==0) {
 								for(var i=0;i<data.length;i++) {
-									if(data[i].message.length>0) {
+									if(data[i].message.length>0&&(!checkComments||data[i].comments.count<maxComments)) {
 										var splitMessage=data[i].message.split(" ");
 										var found=false;
 										for(var j=0;!found&&j<splitMessage.length;j++) {
